@@ -1,0 +1,14 @@
+# Versions below are the ones this project's tests were run with (Python 3.12).
+streamlit==1.66.0
+supabase==2.33.0
+google-genai==2.31.0
+pymupdf==1.28.2
+python-docx==1.2.0
+python-pptx==1.0.2
+pandas==3.0.2
+openpyxl==3.1.5
+pillow==12.1.1
+pytesseract==0.3.13
+pygments==2.20.0
+striprtf==0.0.33
+python-dotenv==1.2.2
