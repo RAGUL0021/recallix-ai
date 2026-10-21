@@ -18,7 +18,6 @@ Progress = Callable[[float, str], None]
 def _noop(_p: float, _m: str) -> None:
     pass
 
-
 def ingest_upload(filename: str, data: bytes, progress: Progress = _noop) -> dict:
     s = get_settings()
     uid = auth.user_id()
@@ -31,7 +30,8 @@ def ingest_upload(filename: str, data: bytes, progress: Progress = _noop) -> dic
     sha = sha256_of(data)
     existing = db.find_document_by_hash(sha)
     if existing:
-        raise ValidationFailed(f"You already uploaded this file as “{existing['original_name']}”.")
+        raise ValidationFailed(
+            f"You already uploaded this file as “{existing.get('original_name') or existing.get('filename')}”.")
 
     progress(0.15, "Reading document…")
     parsed = parse_document(data, file_type, max_ocr_pages=s.max_ocr_pages, max_table_rows=s.max_table_rows)
@@ -42,7 +42,9 @@ def ingest_upload(filename: str, data: bytes, progress: Progress = _noop) -> dic
     try:
         status = "needs_ocr" if parsed.needs_ocr else "processing"
         row = db.insert_document({
-            "original_name": safe_name, "file_type": file_type, "mime_type": EXT_MAP[ext][1],
+            "filename": safe_name,           # NOT NULL column
+            "original_name": safe_name,      # dashboard.py idhai dhaan padikkudhu
+            "file_type": file_type, "mime_type": EXT_MAP[ext][1],
             "size_bytes": len(data), "storage_path": path, "sha256": sha,
             "status": status, "status_detail": " ".join(parsed.notes), "page_count": len(parsed.units),
         })

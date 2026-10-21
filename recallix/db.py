@@ -14,7 +14,14 @@ def _run(query):
     try:
         return query.execute().data
     except Exception as exc:
-        log.error("db error: %s", type(exc).__name__)
+        log.error(
+            "db error: %s | message=%s | code=%s | details=%s | hint=%s",
+            type(exc).__name__,
+            getattr(exc, "message", None) or str(exc),
+            getattr(exc, "code", None),
+            getattr(exc, "details", None),
+            getattr(exc, "hint", None),
+        )
         raise AppError("A database error occurred. Please try again.") from exc
 
 
@@ -135,8 +142,9 @@ def match_chunks(doc_id: str, embedding: list[float], k: int = 6) -> list[dict]:
                                                   "match_count": k}).execute()
         return res.data or []
     except Exception as exc:
-        log.error("vector search failed: %s", type(exc).__name__)
-        raise AppError("Document search is temporarily unavailable. Please retry.") from exc
+        log.error("vector search failed: %s | message=%s | code=%s",
+                  type(exc).__name__, getattr(exc, "message", None) or str(exc), getattr(exc, "code", None))
+        raise AppError(...) from exc
 
 
 def chunk_count(doc_id: str) -> tuple[int, int]:

@@ -177,3 +177,6 @@ Create an empty repo on github.com and follow its "push an existing repository" 
 | Document stuck on "failed" | open it and press **Retry indexing** (usually a quota/API hiccup) |
 | `type "extensions.vector" does not exist` | re-run the SQL; the `vector` extension must exist in schema `extensions` |
 | OCR button missing | Tesseract not installed / not on PATH |
+#   r e c a l l i x - a i  
+ #   r e c a l l i x - a i  
+ 
